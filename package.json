@@ -1,0 +1,27 @@
+{
+  "name": "practice---social---media",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "AliSouri",
+  "license": "MIT",
+  "description": "",
+  "dependencies": {
+    "bcrypt": "^6.0.0",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^5.2.1",
+    "express-flash": "^0.0.2",
+    "express-session": "^1.19.0",
+    "jsonwebtoken": "^9.0.3",
+    "moment": "^2.30.1",
+    "mongoose": "^9.7.2",
+    "multer": "^2.2.0",
+    "nodemon": "^3.1.14",
+    "swagger-ui-express": "^5.0.1",
+    "uuid": "^14.0.1",
+    "yup": "^1.7.1"
+  }
+}
