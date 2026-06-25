@@ -5,9 +5,10 @@ const path = require('path');
 
 
 //static folders
-app.use('/css', express.static(path.join(__dirname, 'public', 'css')))
-
-
+app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/fonts', express.static(path.join(__dirname, 'public', 'fonts')));
+app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
 //Template engine
 app.set('view engine', 'ejs');
