@@ -3,6 +3,7 @@ const app = express();
 
 const {setHeaders} = require('./utils/middlewares/headers');
 const path = require('path');
+const {errorHandler} = require('./utils/middlewares/errorHandler');
 
 
 app.use(express.json({limit: '50mb'}));
@@ -35,5 +36,7 @@ app.get('/', (req, res) => {
 app.use((req, res) => {
     return res.status(404).json({message: `this path is not found: ${req.path}`})
 });
+
+
 
 module.exports = app;
