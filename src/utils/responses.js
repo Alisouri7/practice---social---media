@@ -4,7 +4,7 @@ const successResponse = (res, statusCode = 200, data) => {
 };
 
 
-//Helper function to format fuiler response
+//Helper function to format failure response
 const errorResponse = (res, statusCode , message,data) => {
     console.log({message, data})
     
