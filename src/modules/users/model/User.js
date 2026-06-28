@@ -19,6 +19,7 @@ const schema = mongoose.Schema({
     },
         name: {
         type: String,
+        required: true
     },
         password: {
         type: String,
@@ -26,7 +27,7 @@ const schema = mongoose.Schema({
     },
         profilePicture: {
         type: String,
-        required: true
+        required: false
     },
         role: {
         type: String,
