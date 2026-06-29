@@ -1,10 +1,22 @@
 const { errorHandler } = require('../../../utils/middlewares/errorHandler');
 const { successResponse } = require('../../../utils/responses');
 const userModel = require('./../../users/model/User');
+const { userRegisterValidationSchema } = require('./../../../utils/validators/registerUserValidator')
+
 
 exports.register = async (req, res) => {
     try {
         const { email, username, password, name } = req.body;
+
+        //Validation
+        await userRegisterValidationSchema.validate({
+            email,
+            username,
+            password,
+            name
+        }, { 
+            abortEarly: false                 //abortEarly: false => determines that validate all properties and then return an array of errors
+        });
 
         const isUserExist = await userModel.findOne({ $or: [{ username }, { email }] }).lean();
 
