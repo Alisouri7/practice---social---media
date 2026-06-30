@@ -4,7 +4,7 @@ const userModel = require('./../../users/model/User');
 const { userRegisterValidationSchema } = require('./../../../utils/validators/registerUserValidator')
 
 exports.showRegisterView = async (req, res) => {
-    return res.render('./../Pages/Auth/Register/index')
+    return res.render('./Pages/Auth/Register/index')
 };
 
 
