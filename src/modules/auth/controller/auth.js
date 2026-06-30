@@ -29,7 +29,7 @@ exports.register = async (req, res, next) => {
             return errorHandler(res, 400, 'Email or Username Already Exist',)
         };
 
-        const isFirstUser = (await userModel.countDocument()) === 0;
+        const isFirstUser = (await userModel.countDocuments({})) === 0;
         let role = 'USER'
         if (isFirstUser) {
             role = 'ADMIN'
