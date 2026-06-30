@@ -7,4 +7,4 @@ const userRegisterValidationSchema = yup.object({
     password: yup.string().min(8, 'Please Enter at least 8 chars').required('Password is required')
 });
 
-module.exports = {userRegisterValidationSchema};
+module.exports = userRegisterValidationSchema;

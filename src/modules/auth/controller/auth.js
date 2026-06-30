@@ -1,17 +1,19 @@
-const { errorHandler } = require('../../../utils/middlewares/errorHandler');
-const { successResponse } = require('../../../utils/responses');
+const { errorHandler } = require('./../../../utils/middlewares/errorHandler');
+const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
-const { userRegisterValidationSchema } = require('./../../../utils/validators/registerUserValidator')
+const userRegisterValidationSchema  = require('./../../../utils/validators/registerUserValidator')
+const mongoose = require('mongoose');
+
 
 exports.showRegisterView = async (req, res) => {
     return res.render('./Pages/Auth/Register/index')
 };
 
 
-exports.register = async (req, res, next) => {
+exports.register = async (req, res) => {
     try {
         const { email, username, password, name } = req.body;
-        console.log(req.body);
+        
         
         //Validation
         await userRegisterValidationSchema.validate({
@@ -26,7 +28,7 @@ exports.register = async (req, res, next) => {
         const isUserExist = await userModel.findOne({ $or: [{ username }, { email }] }).lean();
 
         if (isUserExist) {
-            return errorHandler(res, 400, 'Email or Username Already Exist',)
+            return responseHandler.errorResponse(res, 400, 'Email or Username Already Exist',{})
         };
 
         const isFirstUser = (await userModel.countDocuments({})) === 0;
@@ -34,12 +36,15 @@ exports.register = async (req, res, next) => {
         if (isFirstUser) {
             role = 'ADMIN'
         };
-
-        let newUser = new userModel({ email, username, name, password, role });
+     
+        const newUser = new userModel({ email, username, name, password, role });
+        
         await newUser.save();
+        
 
-        return successResponse(res, 201, { message: 'User created successfully', user: { ...newUser, password: undefined } })
+        return responseHandler.successResponse(res, 201, { message: 'User created successfully', user: { ...newUser.toObject() , password: undefined } })
     } catch (error) {
-        next(error)
+        responseHandler.errorResponse(res, 400, error,{error})
+        // next(error)
     }
 }
