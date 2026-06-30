@@ -3,6 +3,10 @@ const { successResponse } = require('../../../utils/responses');
 const userModel = require('./../../users/model/User');
 const { userRegisterValidationSchema } = require('./../../../utils/validators/registerUserValidator')
 
+exports.showRegisterView = async (req, res) => {
+    return res.render('./../Pages/Auth/Register/index')
+};
+
 
 exports.register = async (req, res) => {
     try {
