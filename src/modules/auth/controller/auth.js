@@ -8,10 +8,11 @@ exports.showRegisterView = async (req, res) => {
 };
 
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
     try {
         const { email, username, password, name } = req.body;
-
+        console.log(req.body);
+        
         //Validation
         await userRegisterValidationSchema.validate({
             email,
