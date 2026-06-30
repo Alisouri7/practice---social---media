@@ -1,5 +1,7 @@
 const express = require('express');
 const app = express();
+const flash = require('express-flash');
+const session = require('express-session');
 
 const {setHeaders} = require('./utils/middlewares/headers');
 const path = require('path');
@@ -12,6 +14,17 @@ app.use(express.urlencoded({extended: true, limit: '50mb'}));
 
 //cors policy
 app.use(setHeaders);
+
+
+//express-flash
+app.use(session({
+    secret: 'secret-key',
+    resave: false,
+    saveUninitialized: false
+}))
+app.use(flash());
+
+
 
 //static folders
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
