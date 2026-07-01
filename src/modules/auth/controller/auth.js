@@ -44,8 +44,10 @@ exports.register = async (req, res) => {
         
         await newUser.save();
         
+        req.flash('success', 'Registration Successfull')
 
-        return responseHandler.successResponse(res, 201, { message: 'User created successfully', user: { ...newUser.toObject() , password: undefined } })
+        return res.redirect('/auth/register')
+        // return responseHandler.successResponse(res, 201, { message: 'User created successfully', user: { ...newUser.toObject() , password: undefined } })
     } catch (error) {
         responseHandler.errorResponse(res, 400, error,{error})
         // next(error)
