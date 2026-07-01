@@ -28,7 +28,10 @@ exports.register = async (req, res) => {
         const isUserExist = await userModel.findOne({ $or: [{ username }, { email }] }).lean();
 
         if (isUserExist) {
-            return responseHandler.errorResponse(res, 400, 'Email or Username Already Exist',{})
+            req.flash('error', 'Email or Username Already Exist')
+
+            return res.redirect('/auth/register')
+            // return responseHandler.errorResponse(res, 400, 'Email or Username Already Exist',{})
         };
 
         const isFirstUser = (await userModel.countDocuments({})) === 0;
