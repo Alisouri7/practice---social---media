@@ -3,7 +3,7 @@ const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
 const userRegisterValidationSchema  = require('./../../../utils/validators/registerUserValidator')
 const mongoose = require('mongoose');
-
+const jwt = require('jsonwebtoken');
 
 exports.showRegisterView = async (req, res) => {
     return res.render('./Pages/Auth/Register/index')
@@ -44,6 +44,12 @@ exports.register = async (req, res) => {
         
         await newUser.save();
         
+        const accessToken = jwt.sign({userID: newUser._id}, process.env.JWT_SECRET, {
+            expiresIn: '30day'
+        });
+
+        res.cookie('token', accessToken, {maxAge: 900_000_000});
+
         req.flash('success', 'Registration Successfull')
 
         return res.redirect('/auth/register')
