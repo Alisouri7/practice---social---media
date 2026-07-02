@@ -48,7 +48,7 @@ exports.register = async (req, res) => {
             expiresIn: '30day'
         });
 
-        res.cookie('token', accessToken, {maxAge: 900_000_000});
+        res.cookie('token', accessToken, {maxAge: 900_000_000, httpOnly: true});
 
         req.flash('success', 'Registration Successfull')
 
