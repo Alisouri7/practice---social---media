@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const { string } = require('yup');
+
 
 const schema = mongoose.Schema({
     email: {
@@ -45,11 +45,13 @@ const schema = mongoose.Schema({
 }, { timestamps: true});
 
 
-schema.pre('save', async (next) => {
+schema.pre('save', async () => {
     try {
-        this.password = await bcrypt.hash(this.password, 10)
+        const salt = await bcrypt.genSalt(12);
+        this.password = await bcrypt.hash(this.password, salt)
         // next()
     } catch (error) {
+        console.log(error);
         // next(error)
     }
 });
