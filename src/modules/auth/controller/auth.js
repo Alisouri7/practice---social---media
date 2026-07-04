@@ -2,7 +2,8 @@ const { errorHandler } = require('./../../../utils/middlewares/errorHandler');
 const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
 const refreshTokenModel = require('./../../token/refresh_token/model/refreshToken');
-const userRegisterValidationSchema = require('./../../../utils/validators/registerUserValidator')
+const userRegisterValidationSchema = require('./../../../utils/validators/registerUserValidator');
+const userLoginValidationSchema = require('./../../../utils/validators/loginUserValidator')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -76,6 +77,10 @@ exports.showLoginView = async (req, res) => {
 exports.login = async (req, res) => {
     const { email, password } = req.body;
 
+
+    await userLoginValidationSchema.validate({email, password}, {abortEarly: false});
+
+    
     const user = await userModel.findOne({ email }).lean();
 
     if (!user) {
