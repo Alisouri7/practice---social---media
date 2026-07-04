@@ -14,7 +14,7 @@
 <body class="auth-page">
     <section id="auth-container">
 
-        <form id="auth-form">
+        <form id="auth-form" method="post" action="/auth/login">
             <header>
                 <h2 class="text-3xl">
                     Welcome back 🌞
@@ -26,11 +26,11 @@
 
                 <div class="auth-input-card">
                     <label for="register_username" class="font-Poppins-Medium">
-                        username or email
+                        Email
                     </label>
                     <div class="relative flex input-card items-center">
-                        <input id="register_username" type="text" class="auth-input"
-                            placeholder="Please enter the your username..">
+                        <input id="register_username" name="email" type="text" class="auth-input"
+                            placeholder="Please enter the your email...">
                         <span class="absolute left-2 top-4 text-gray-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
                                 <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 12a4.5 4.5 0 1 1-9 0 4.5 4.5 0 0 1 9 0Zm0 0c0 1.657 1.007 3 2.25 3S21 13.657 21 12a9 9 0 1 0-2.636 6.364M16.5 12V8.25" />
@@ -50,7 +50,7 @@
                         Password
                     </label>
                     <div class="relative flex input-card items-center">
-                        <input id="register_password" type="password" class="auth-input"
+                        <input id="register_password" name="password" type="password" class="auth-input"
                             placeholder="Please enter the your password..">
                         <span class="absolute left-2 top-4 text-gray-300">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
