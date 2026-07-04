@@ -5,8 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title> SabzSocial | Login</title>
-    <link rel="stylesheet" href="/public/css/index.css">
-    <link rel="stylesheet" href="/public/css/styles.css">
+    <link rel="stylesheet" href="/css/index.css">
+    <link rel="stylesheet" href="/css/styles.css">
 </head>
 
 <!-- id="auth-container" -->
@@ -88,6 +88,26 @@
     </div>
 
     </form>
+
+
+     <!-- sweetalert -->
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        if ("<%= locals.messages.error%>") {
+            swal({
+                title: '<%= locals.messages.error%>',
+                icon: 'error',
+                button: 'Try Again'
+            })
+        } else if ("<%= locals.messages.success%>") {
+            swal({
+                title: '<%= locals.messages.success%>',
+                icon: 'success',
+                button: 'OK'
+            })
+        }
+
+    </script>
 </body>
 
 </html>

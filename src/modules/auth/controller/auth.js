@@ -1,6 +1,7 @@
 const { errorHandler } = require('./../../../utils/middlewares/errorHandler');
 const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
+const refreshTokenModel = require('./../../token/refresh_token/model/refreshToken');
 const userRegisterValidationSchema  = require('./../../../utils/validators/registerUserValidator')
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
@@ -48,7 +49,13 @@ exports.register = async (req, res) => {
             expiresIn: '30day'
         });
 
-        res.cookie('token', accessToken, {maxAge: 900_000_000, httpOnly: true});
+        const refreshToken = await refreshTokenModel.createToken(newUser);
+
+
+
+
+        res.cookie('access-token', accessToken, {maxAge: 900_000_000, httpOnly: true});
+        res.cookie('refresh-token', refreshToken, {maxAge: 900_000_000, httpOnly: true});
 
         req.flash('success', 'Registration Successfull')
 
