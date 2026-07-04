@@ -14,7 +14,7 @@ exports.showRegisterView = async (req, res) => {
 };
 
 
-exports.register = async (req, res) => {
+exports.register = async (req, res, next) => {
     try {
         const { email, username, password, name } = req.body;
 
@@ -65,8 +65,9 @@ exports.register = async (req, res) => {
         return res.redirect('/auth/register')
         // return responseHandler.successResponse(res, 201, { message: 'User created successfully', user: { ...newUser.toObject() , password: undefined } })
     } catch (error) {
-        responseHandler.errorResponse(res, 400, error, { error })
-        // next(error)
+        
+        next(error)
+        // responseHandler.errorResponse(res, 400, error, { error })
     }
 }
 
@@ -74,44 +75,49 @@ exports.showLoginView = async (req, res) => {
     return res.render('./Pages/Auth/Login/index')
 };
 
-exports.login = async (req, res) => {
-    const { email, password } = req.body;
+exports.login = async (req, res, next) => {
+    try {
+        const { email, password } = req.body;
 
 
-    await userLoginValidationSchema.validate({email, password}, {abortEarly: false});
+        await userLoginValidationSchema.validate({ email, password }, { abortEarly: false });
 
-    
-    const user = await userModel.findOne({ email }).lean();
 
-    if (!user) {
-        req.flash('error', 'Invalid Email or Password')
+        const user = await userModel.findOne({ email }).lean();
+
+        if (!user) {
+            req.flash('error', 'Invalid Email or Password')
+
+            return res.redirect('/auth/login')
+        }
+
+        const isPasswordMatch = await bcrypt.compare(password, user.password);
+
+        if (!isPasswordMatch) {
+            req.flash('error', 'Invalid Email or Password')
+
+            return res.redirect('/auth/login')
+        };
+
+
+
+        const accessToken = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '30day'
+        });
+
+        const refreshToken = await refreshTokenModel.createToken(user);
+
+
+
+
+        res.cookie('access-token', accessToken, { maxAge: 900_000_000, httpOnly: true });
+        res.cookie('refresh-token', refreshToken, { maxAge: 900_000_000, httpOnly: true });
+
+        req.flash('success', 'Login Successfull')
 
         return res.redirect('/auth/login')
+    } catch (error) {
+        next(error)
+        
     }
-
-    const isPasswordMatch = await bcrypt.compare(password, user.password);
-
-    if (!isPasswordMatch) {
-        req.flash('error', 'Invalid Email or Password')
-
-        return res.redirect('/auth/login')
-    };
-
-
-
-    const accessToken = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
-        expiresIn: '30day'
-    });
-
-    const refreshToken = await refreshTokenModel.createToken(user);
-
-
-
-
-    res.cookie('access-token', accessToken, { maxAge: 900_000_000, httpOnly: true });
-    res.cookie('refresh-token', refreshToken, { maxAge: 900_000_000, httpOnly: true });
-
-    req.flash('success', 'Login Successfull')
-
-    return res.redirect('/auth/login')
 };

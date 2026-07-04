@@ -3,9 +3,9 @@ const app = express();
 const flash = require('express-flash');
 const session = require('express-session');
 
+const {errorHandler}  = require('./utils/middlewares/errorHandler');
 const {setHeaders} = require('./utils/middlewares/headers');
 const path = require('path');
-const {errorHandler} = require('./utils/middlewares/errorHandler');
 const authRouter = require('./modules/auth/routes/auth');
 
 app.use(express.json({limit: '50mb'}));
@@ -51,6 +51,6 @@ app.use((req, res) => {
     return res.status(404).json({message: `this path is not found: ${req.path}`})
 });
 
-
+app.use(errorHandler)
 
 module.exports = app;
