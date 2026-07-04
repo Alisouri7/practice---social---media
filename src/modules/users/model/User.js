@@ -9,49 +9,54 @@ const schema = mongoose.Schema({
         unique: true,
         lowercase: true
     },
-        username: {
+    username: {
         type: String,
         required: true,
         unique: true
     },
-        biography: {
+    biography: {
         type: String
     },
-        name: {
+    name: {
         type: String,
         required: true
     },
-        password: {
+    password: {
         type: String,
         required: true
     },
-        profilePicture: {
+    profilePicture: {
         type: String,
         required: false
     },
-        role: {
+    role: {
         type: String,
         enum: ['ADMIN', 'USER'],
         default: 'USER'
     },
-        private: {
+    private: {
         type: Boolean,
         default: false,
     },
-        isVerified: {
+    isVerified: {
         type: Boolean,
         default: false
     }
-}, { timestamps: true});
+}, { timestamps: true });
 
 
-schema.pre('save', async () => {
+schema.pre('save', async function () {
     try {
-        const salt = await bcrypt.genSalt(12);
-        this.password = await bcrypt.hash(this.password, salt)
+
+        if (!this.isModified('password')) return;     //hash password only when it changes
+
+        const hashedPassword  = await bcrypt.hash(this.password, 10);
+      
+        this.password = hashedPassword;
         // next()
     } catch (error) {
         console.log(error);
+        throw new Error(error)
         // next(error)
     }
 });
