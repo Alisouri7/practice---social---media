@@ -1,5 +1,4 @@
 exports.errorHandler = (error, req, res, next) => {
-    console.log(error.name);
     
     if (error.name === 'ValidationError') {
         const formattedErrors = error.inner.map(err => ({
