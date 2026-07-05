@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
     media: {
+        required: true,
         path: { type: String, required: true },
         filename: { type: String, required: true }
     },
@@ -10,7 +11,10 @@ const schema = mongoose.Schema({
         type: String,
         required: true
     },
-        user: {
+    hashtags: {
+        type: [String]
+    },
+    user: {
         type: mongoose.Types.ObjectId,
         ref: 'User',
         required: true
