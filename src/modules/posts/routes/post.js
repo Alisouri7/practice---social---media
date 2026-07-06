@@ -4,7 +4,7 @@ const postController = require('./../controller/post');
 const authMiddleware = require('./../../../utils/middlewares/auth');
 
 router.route('/')
-    .get(postController.showPostUploadView)
+    .get(authMiddleware, postController.showPostUploadView)
     .post(authMiddleware, postController.createPost);
 
 module.exports = router;
