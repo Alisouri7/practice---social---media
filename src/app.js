@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const flash = require('express-flash');
 const session = require('express-session');
+const cookieParser = require('cookie-parser');
 
 const {errorHandler}  = require('./utils/middlewares/errorHandler');
 const {setHeaders} = require('./utils/middlewares/headers');
@@ -12,6 +13,9 @@ const postRouter = require('./modules/posts/routes/post');
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
 
+
+//cookie parser
+app.use(cookieParser(process.env.JWT_SECRET))
 
 //cors policy
 app.use(setHeaders);
