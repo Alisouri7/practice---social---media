@@ -7,6 +7,7 @@ const {errorHandler}  = require('./utils/middlewares/errorHandler');
 const {setHeaders} = require('./utils/middlewares/headers');
 const path = require('path');
 const authRouter = require('./modules/auth/routes/auth');
+const postRouter = require('./modules/posts/routes/post');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -44,6 +45,8 @@ app.get('/', (req, res) => {
 });
 
 app.use('/auth', authRouter);
+
+app.use('/posts', postRouter);
 
 //404 error handler
 
