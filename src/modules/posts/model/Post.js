@@ -3,7 +3,6 @@ const mongoose = require('mongoose');
 
 const schema = mongoose.Schema({
     media: {
-        required: true,
         path: { type: String, required: true },
         filename: { type: String, required: true }
     },

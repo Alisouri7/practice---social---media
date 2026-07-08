@@ -35,7 +35,7 @@ exports.createPost = async (req, res, next) => {
         await post.save();
         
         req.flash('success', 'Post Created Successfully:)')
-        return res.render('./Pges/postUpload/index')
+        return res.render('./Pages/postUpload/index')
 
     } catch (error) {
         next(error)

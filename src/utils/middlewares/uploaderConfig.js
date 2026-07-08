@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 
 exports.multerUploader = (destination, allowedTypes = /jpeg|jpg|png|webp|mp4|mkv/) => {
-    //create irectory if doesnt exist
+    //create directory if doesnt exist
     if (!fs.existsSync(destination)) {
         fs.mkdirSync(destination)
     };
