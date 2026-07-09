@@ -9,6 +9,7 @@ const {setHeaders} = require('./utils/middlewares/headers');
 const path = require('path');
 const authRouter = require('./modules/auth/routes/auth');
 const postRouter = require('./modules/posts/routes/post');
+const pageRouter = require('./modules/pages/routes/router');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -33,7 +34,7 @@ app.use(flash());
 
 //static folders
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
-app.use('/js', express.static(path.join(__dirname, 'public', 'css')));
+app.use('/js', express.static(path.join(__dirname, 'Functions')));
 app.use('/fonts', express.static(path.join(__dirname, 'public', 'fonts')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
 
@@ -51,6 +52,8 @@ app.get('/', (req, res) => {
 app.use('/auth', authRouter);
 
 app.use('/posts', postRouter);
+
+app.use('/pages', pageRouter);
 
 //404 error handler
 

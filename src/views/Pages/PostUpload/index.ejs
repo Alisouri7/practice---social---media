@@ -108,7 +108,8 @@
                             </span>
                             <span class="requre-symbol">*</span>
                         </label>
-                        <input type="text" name="hashtags" id="post-hashtags" placeholder="javascript, edit, trend, explore, ne...">
+                        <input type="text" name="hashtags" id="post-hashtags"
+                            placeholder="javascript, edit, trend, explore, ne...">
                         <div id="hashtags-wrap" class="flex text-sm my-2 items-center gap-2">
 
                         </div>
@@ -148,6 +149,23 @@
     <!-- Scripts -->
     <script src="./../../../Functions/index.js"></script>
 
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        if ("<%= locals.messages.error%>") {
+            swal({
+                title: '<%= locals.messages.error%>',
+                icon: 'error',
+                button: 'Try Again'
+            })
+        } else if ("<%= locals.messages.success%>") {
+            swal({
+                title: '<%= locals.messages.success%>',
+                icon: 'success',
+                button: 'OK'
+            })
+        }
+
+    </script>
 </body>
 
 </html>

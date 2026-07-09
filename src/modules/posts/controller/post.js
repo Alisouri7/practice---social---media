@@ -13,7 +13,7 @@ exports.createPost = async (req, res, next) => {
 
         if (!req.file) {
             req.flash('error', 'Media is required')
-            return res.render('./Pages/postUpload/index')
+            return res.redirect('/posts')
         }
 
         await createPostValidator.validate({description}, {abortEarly: false});
@@ -35,7 +35,7 @@ exports.createPost = async (req, res, next) => {
         await post.save();
         
         req.flash('success', 'Post Created Successfully:)')
-        return res.render('./Pages/postUpload/index')
+        return res.redirect('/posts')
 
     } catch (error) {
         next(error)
