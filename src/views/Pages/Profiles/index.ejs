@@ -11,7 +11,7 @@
 </head>
 
 <body>
- 
+
     <!-- Header/navbar -->
     <header>
         <nav class="w-full flex-between  py-5 container">
@@ -32,7 +32,7 @@
                 <input placeholder="Search in Neko Social .." type="text" class="bg-transparent px-8 w-full h-full">
             </div>
             <div class="flex gap-6 items-center">
-                <a  class="create-button bg-indigo-600" href="/src/Pages/PostUpload/index.html">
+                <a class="create-button bg-indigo-600" href="/src/Pages/PostUpload/index.html">
                     Create
                 </a>
                 <div class="w-12 h-12 rounded-full overflow-hidden rounded-full">
@@ -402,6 +402,24 @@
 
     <!-- Scripts -->
     <script src="/js/profile.js"></script>
+
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script>
+        if ("<%= locals.messages.error%>") {
+            swal({
+                title: '<%= locals.messages.error%>',
+                icon: 'error',
+                button: 'Try Again'
+            })
+        } else if ("<%= locals.messages.success%>") {
+            swal({
+                title: '<%= locals.messages.success%>',
+                icon: 'success',
+                button: 'OK'
+            })
+        }
+
+    </script>
 
 </body>
 
