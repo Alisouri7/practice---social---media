@@ -115,9 +115,24 @@
                                     Manage
                                 </span>
                             </a>
-                            <button class="unfollow-button font-Poppins-Bold">
-                                Unfollow
-                            </button>
+
+                            <%if (followStatus) { %>
+
+                                <form action="/pages/<%= pageID%>/follow" method="post">
+                                    <button class="unfollow-button font-Poppins-Bold">
+                                        Unfollow
+                                    </button>
+                                </form>
+
+                                <% } else { %>
+
+                                    <form action="/pages/<%= pageID%>/unfollow" method="post">
+                                        <button class="unfollow-button font-Poppins-Bold">
+                                            Follow
+                                        </button>
+                                    </form>
+
+                                    <% } %>
                         </div>
                     </div>
 
@@ -403,7 +418,7 @@
     <!-- Scripts -->
     <script src="/js/profile.js"></script>
 
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="/js/sweetalert.min.js"></script>
     <script>
         if ("<%= locals.messages.error%>") {
             swal({
