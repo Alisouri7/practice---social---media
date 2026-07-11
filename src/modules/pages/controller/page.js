@@ -1,7 +1,7 @@
 const hasAccessToPage = require("./../../../utils/hasAccessToPage");
 const followModel = require('./../../follower/model/Follower');
 const userModel = require('./../../users/model/User');
-
+const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
     try {
@@ -33,9 +33,9 @@ exports.getPage = async (req, res, next) => {
 exports.follow = async (req, res, next) => {
     try {
         const user = req.user;
-        const pageID = req.params;
-
-        const isPageExist = await userModel.findOne({ _id: pageID }).lean();
+        const { pageID } = req.params;
+ 
+        const isPageExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(pageID) }).lean();
 
         if (!isPageExist) {
             req.flash('error', 'Page Not Found To Follow')

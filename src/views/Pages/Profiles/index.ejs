@@ -118,7 +118,7 @@
 
                             <%if (followStatus) { %>
 
-                                <form action="/pages/<%= pageID%>/follow" method="post">
+                                <form action="/pages/<%= pageID%>/unfollow" method="post">
                                     <button class="unfollow-button font-Poppins-Bold">
                                         Unfollow
                                     </button>
@@ -126,7 +126,7 @@
 
                                 <% } else { %>
 
-                                    <form action="/pages/<%= pageID%>/unfollow" method="post">
+                                    <form action="/pages/<%= pageID%>/follow" method="post">
                                         <button class="unfollow-button font-Poppins-Bold">
                                             Follow
                                         </button>
