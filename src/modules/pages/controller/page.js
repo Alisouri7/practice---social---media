@@ -1,5 +1,7 @@
 const hasAccessToPage = require("./../../../utils/hasAccessToPage");
 const followModel = require('./../../follower/model/Follower');
+const userModel = require('./../../users/model/User');
+
 
 exports.getPage = async (req, res, next) => {
     try {
@@ -30,7 +32,34 @@ exports.getPage = async (req, res, next) => {
 
 exports.follow = async (req, res, next) => {
     try {
-        
+        const user = req.user;
+        const pageID = req.params;
+
+        const isPageExist = await userModel.findOne({ _id: pageID }).lean();
+
+        if (!isPageExist) {
+            req.flash('error', 'Page Not Found To Follow')
+            return res.redirect(`/pages/${pageID}`)
+        };
+
+        if (user._id.toString() === pageID) {
+            req.flash('error', 'You can not follow your page')
+            return res.redirect(`/pages/${pageID}`)
+        }
+        const isFollowExist = await followModel.findOne({ follower: user._id, following: pageID }).lean();
+
+        if (isFollowExist) {
+            req.flash('error', 'Page Already Followed')
+            return res.redirect(`/pages/${pageID}`)
+        };
+
+        await followModel.create({
+            follower: user._id,
+            following: pageID
+        });
+
+        req.flash('success', 'Page Followed Successfully')
+        return res.redirect(`/pages/${pageID}`)
     } catch (error) {
         next(error)
     }
@@ -38,7 +67,7 @@ exports.follow = async (req, res, next) => {
 
 exports.unFollow = async (req, res, next) => {
     try {
-        
+
     } catch (error) {
         next(error)
     }
