@@ -1,3 +1,4 @@
+
 const hasAccessToPage = require("./../../../utils/hasAccessToPage");
 const followModel = require('./../../follower/model/Follower');
 const userModel = require('./../../users/model/User');
@@ -34,7 +35,7 @@ exports.follow = async (req, res, next) => {
     try {
         const user = req.user;
         const { pageID } = req.params;
- 
+
         const isPageExist = await userModel.findOne({ _id: new mongoose.Types.ObjectId(pageID) }).lean();
 
         if (!isPageExist) {
@@ -67,7 +68,22 @@ exports.follow = async (req, res, next) => {
 
 exports.unFollow = async (req, res, next) => {
     try {
+        const user = req.user;
+        const { pageID } = req.params;
 
+        const unfollowed = await followModel.findOneAndDelete({ follower: user._id, following: new mongoose.Types.ObjectId(pageID) });
+
+        if (!unfollowed) {
+            req.flash('error', 'You Didnt Follow This Page')
+            return res.redirect(`/pages/${pageID}`)
+        };
+
+        req.flash('success', 'Unfollowed Successfully');
+
+        return res.render('./Pages/Profiles/index', {
+            followStatus: false,
+            pageID
+        })
     } catch (error) {
         next(error)
     }
