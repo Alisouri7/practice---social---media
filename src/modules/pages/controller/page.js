@@ -18,13 +18,24 @@ exports.getPage = async (req, res, next) => {
             req.flash('error', 'Follow Page To Show Content')
             return res.render('./Pages/Profiles/index', {
                 followStatus: Boolean(followStatus),
-                pageID
+                pageID,
+                followers: []
             })
         };
 
+
+        let followers = await followModel.find({ following: pageID}).populate('follower', 'username name').lean();
+
+        followers = followers.map((item) => {
+           return item.follower
+        });
+
+        console.log(followers);
+        
         res.render('./Pages/Profiles/index', {
             followStatus: Boolean(followStatus),
-            pageID
+            pageID,
+            followers
         })
     } catch (err) {
         next(err)

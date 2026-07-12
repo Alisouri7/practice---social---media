@@ -57,6 +57,7 @@ const modal = $.querySelector("#modal-card");
 const modalScreen = $.querySelector("#modal");
 
 const followingsButton = $.querySelector("#followings");
+const followersButton = $.querySelector("#followers");
 const closeButton = $.querySelector("#close-button");
 
 const sendVerificationButton = $.querySelector(".send-verification");
@@ -106,7 +107,7 @@ followingsButton.addEventListener("click", () => {
         </div>
         <div>
             <button class="follow-button text-xs">
-                Follow
+                Unfollow
             </button>
         </div>
     </article>
@@ -128,7 +129,7 @@ followingsButton.addEventListener("click", () => {
         </div>
         <div>
             <button class="follow-button text-xs">
-                Follow
+                Unfollow
             </button>
         </div>
     </article>
@@ -150,7 +151,7 @@ followingsButton.addEventListener("click", () => {
         </div>
         <div>
             <button class="follow-button text-xs">
-                Follow
+                Unfollow
             </button>
         </div>
     </article>
@@ -178,6 +179,121 @@ followingsButton.addEventListener("click", () => {
     </article>
 </main>`
   );
+});
+
+followersButton.addEventListener("click", () => {
+  modalScreen.classList.contains("visible")
+    ? modalScreen.classList.remove("visible")
+    : modalScreen.classList.add("visible");
+
+//   modal.innerHTML = "";
+//   modal.insertAdjacentHTML(
+//     "afterbegin",
+//     `
+//     <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
+//     <div></div>
+//     <div class="pl-5">
+//         Followers
+//     </div>
+//     <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+//         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+//             stroke="currentColor" class="w-6 h-6">
+//             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+//         </svg>
+
+//     </button>
+// </header>
+// <main class="mt-2">
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/feed-3.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Elisabet Jackson
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @elisabet
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Follow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-18.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Noah Taylor
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @noah_gamer
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Follow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-6.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Hannah Smith
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @mrs.smith
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Follow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-1.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Lena Mc'Queen
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @the_lena
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Follow
+//             </button>
+//         </div>
+//     </article>
+// </main>`
+//   );
 });
 
 const modalCloseHandler = () => {
