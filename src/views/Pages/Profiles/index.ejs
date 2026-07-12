@@ -97,7 +97,7 @@
                             <!-- Profile Followers/Following count -->
                             <div class="flex items center gap-4 mt-4">
                                 <div id="followers" class="flex items center cursor-pointer gap-1">
-                                    <span class="count">49</span>
+                                    <span class="count"><%= followers.length%></span>
                                     <span class="text-gray-700">Followers</span>
                                 </div>
                                 <div id="followings" class="flex items-center cursor-pointer gap-1">
@@ -412,6 +412,20 @@
     <!-- Modal -->
     <section id="modal" class="modal-screen">
         <section id="modal-card">
+            <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
+                <div></div>
+                <div class="pl-5">
+                    Followers (<%= followers.length%>)
+                </div>
+                <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                </button>
+            </header>
+
             <main class="mt-2">
                 <% if (followers.length> 0) { %>
 
@@ -442,7 +456,7 @@
 
                             <% } else { %>
                                 <h2 style="text-align: center;">You Dont Have Acces To Followers</h2>
-                            <% } %>
+                                <% } %>
             </main>
         </section>
     </section>
