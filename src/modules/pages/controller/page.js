@@ -14,12 +14,18 @@ exports.getPage = async (req, res, next) => {
 
         const followStatus = await followModel.findOne({ follower: userID, following: pageID }).lean();
 
+
+        const page = await userModel.findOne({_id: pageID}, 'name username biography isVerified').lean();
+
+        console.log(page);
+        
         if (!hasAccess) {
             req.flash('error', 'Follow Page To Show Content')
             return res.render('./Pages/Profiles/index', {
                 followStatus: Boolean(followStatus),
                 pageID,
-                followers: []
+                followers: [],
+                page
             })
         };
 
@@ -30,12 +36,12 @@ exports.getPage = async (req, res, next) => {
            return item.follower
         });
 
-        console.log(followers);
         
         res.render('./Pages/Profiles/index', {
             followStatus: Boolean(followStatus),
             pageID,
-            followers
+            followers,
+            page
         })
     } catch (err) {
         next(err)
