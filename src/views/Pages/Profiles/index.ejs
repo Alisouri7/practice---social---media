@@ -105,8 +105,10 @@
                                     <span class="text-gray-700">Followers</span>
                                 </div>
                                 <div id="followings" class="flex items-center cursor-pointer gap-1">
-                                    <span class="count">4</span>
-                                    <span class="text-gray-700">Following</span>
+                                    <span class="count">
+                                        <%= followings.length%>
+                                    </span>
+                                    <span class="text-gray-700">Followings</span>
                                 </div>
                             </div>
                         </div>
@@ -432,8 +434,11 @@
     <!-- Footer -->
     <footer class="flex items-center gap-2"></footer>
 
-    <!-- Modal -->
-    <section id="modal" class="modal-screen">
+    <!-- Modals -->
+
+<!-- followers modal -->
+    <section id="modal" class="modal-screen followers-modal-screen">
+       
         <section id="modal-card">
             <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
                 <div></div>
@@ -450,7 +455,7 @@
             </header>
 
             <main class="mt-2">
-                <% if (followers.length> 0) { %>
+                <% if (hasAccess) { %>
 
                     <% followers.forEach( follower=> { %>
                         <article class="following-card ">
@@ -481,6 +486,67 @@
                                 <h2 style="text-align: center;">You Dont Have Acces To Followers</h2>
                                 <% } %>
             </main>
+        </section>
+
+
+    </section>
+
+    <!-- followings modal -->
+    <section id="modal" class="modal-screen followings-modal-screen">
+        <section id="modal-card">
+            <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
+                <div></div>
+                <div class="pl-5">
+                    Followings (<%= followings.length%>)
+                </div>
+                <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                        stroke="currentColor" class="w-6 h-6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+                    </svg>
+
+                </button>
+            </header>
+
+            <main class="mt-2">
+                <% if (hasAccess) { %>
+
+                    <% followings.forEach( following=> { %>
+                        <article class="following-card ">
+                            <div class="flex items-center gap-1">
+                                <div class="flex items-center gap-2">
+                                    <div class="w-12 h-12 rounded-full overflow-hidden">
+                                        <img src="/images/feed-3.jpg" class="w-full object-cover h-full" alt="">
+                                    </div>
+                                    <div>
+                                        <h6 class="">
+                                            <%= following.name%>
+                                        </h6>
+                                        <p class="text-sm font-Poppins-Light text-gray-600">
+                                            <%= following.username%>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <button class="follow-button text-xs">
+                                    Unfollow
+                                </button>
+                            </div>
+                        </article>
+                        <% }) %>
+
+                            <% } else { %>
+                                <h2 style="text-align: center;">You Dont Have Acces To Followings</h2>
+                                <% } %>
+            </main>
+        </section>
+    </section>
+
+    <!-- send verification modal -->
+    <section id="modal" class="modal-screen verification-modal-screen">
+        <section id="verification-modal-card">
+            
         </section>
     </section>
 

@@ -53,8 +53,11 @@ const buttonsContainer = $.querySelector("#buttons-container");
 const feedsContainer = $.querySelector("#feeds-container");
 
 // Modal
-const modal = $.querySelector("#modal-card");
-const modalScreen = $.querySelector("#modal");
+const modal = $.querySelector("#verification-modal-card");
+const modalScreen = $.querySelectorAll(".modal-screen");
+const followersModalScreen = $.querySelector('.followers-modal-screen');
+const followingsModalScreen = $.querySelector('.followings-modal-screen');
+const verificationModalScreen = $.querySelector('.verification-modal-screen');
 
 const followingsButton = $.querySelector("#followings");
 const followersButton = $.querySelector("#followers");
@@ -67,124 +70,124 @@ modal.addEventListener("click", (event) => {
 });
 
 followingsButton.addEventListener("click", () => {
-  modalScreen.classList.contains("visible")
-    ? modalScreen.classList.remove("visible")
-    : modalScreen.classList.add("visible");
+  followingsModalScreen.classList.contains("visible")
+    ? followingsModalScreen.classList.remove("visible")
+    : followingsModalScreen.classList.add("visible");
 
-  modal.innerHTML = "";
-  modal.insertAdjacentHTML(
-    "afterbegin",
-    `
-    <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
-    <div></div>
-    <div class="pl-5">
-        Following
-    </div>
-    <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-            stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
-        </svg>
+//   modal.innerHTML = "";
+//   modal.insertAdjacentHTML(
+//     "afterbegin",
+//     `
+//     <header id="modal-header" class="w-full pb-4 flex items-center justify-between">
+//     <div></div>
+//     <div class="pl-5">
+//         Following
+//     </div>
+//     <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+//         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+//             stroke="currentColor" class="w-6 h-6">
+//             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
+//         </svg>
 
-    </button>
-</header>
-<main class="mt-2">
-    <article class="following-card ">
-        <div class="flex items-center gap-1">
-            <div class="flex items-center gap-2">
-                <div class="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/images/feed-3.jpg" class="w-full object-cover h-full" alt="">
-                </div>
-                <div>
-                    <h6 class="">
-                        Elisabet Jackson
-                    </h6>
-                    <p class="text-sm font-Poppins-Light text-gray-600">
-                        @elisabet
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button class="follow-button text-xs">
-                Unfollow
-            </button>
-        </div>
-    </article>
-    <article class="following-card ">
-        <div class="flex items-center gap-1">
-            <div class="flex items-center gap-2">
-                <div class="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/images/profile-18.jpg" class="w-full object-cover h-full" alt="">
-                </div>
-                <div>
-                    <h6 class="">
-                        Noah Taylor
-                    </h6>
-                    <p class="text-sm font-Poppins-Light text-gray-600">
-                        @noah_gamer
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button class="follow-button text-xs">
-                Unfollow
-            </button>
-        </div>
-    </article>
-    <article class="following-card ">
-        <div class="flex items-center gap-1">
-            <div class="flex items-center gap-2">
-                <div class="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/images/profile-6.jpg" class="w-full object-cover h-full" alt="">
-                </div>
-                <div>
-                    <h6 class="">
-                        Hannah Smith
-                    </h6>
-                    <p class="text-sm font-Poppins-Light text-gray-600">
-                        @mrs.smith
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button class="follow-button text-xs">
-                Unfollow
-            </button>
-        </div>
-    </article>
-    <article class="following-card ">
-        <div class="flex items-center gap-1">
-            <div class="flex items-center gap-2">
-                <div class="w-12 h-12 rounded-full overflow-hidden">
-                    <img src="/images/profile-1.jpg" class="w-full object-cover h-full" alt="">
-                </div>
-                <div>
-                    <h6 class="">
-                        Lena Mc'Queen
-                    </h6>
-                    <p class="text-sm font-Poppins-Light text-gray-600">
-                        @the_lena
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div>
-            <button class="follow-button text-xs">
-                Follow
-            </button>
-        </div>
-    </article>
-</main>`
-  );
+//     </button>
+// </header>
+// <main class="mt-2">
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/feed-3.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Elisabet Jackson
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @elisabet
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Unfollow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-18.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Noah Taylor
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @noah_gamer
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Unfollow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-6.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Hannah Smith
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @mrs.smith
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Unfollow
+//             </button>
+//         </div>
+//     </article>
+//     <article class="following-card ">
+//         <div class="flex items-center gap-1">
+//             <div class="flex items-center gap-2">
+//                 <div class="w-12 h-12 rounded-full overflow-hidden">
+//                     <img src="/images/profile-1.jpg" class="w-full object-cover h-full" alt="">
+//                 </div>
+//                 <div>
+//                     <h6 class="">
+//                         Lena Mc'Queen
+//                     </h6>
+//                     <p class="text-sm font-Poppins-Light text-gray-600">
+//                         @the_lena
+//                     </p>
+//                 </div>
+//             </div>
+//         </div>
+//         <div>
+//             <button class="follow-button text-xs">
+//                 Follow
+//             </button>
+//         </div>
+//     </article>
+// </main>`
+//   );
 });
 
 followersButton.addEventListener("click", () => {
-  modalScreen.classList.contains("visible")
-    ? modalScreen.classList.remove("visible")
-    : modalScreen.classList.add("visible");
+  followersModalScreen.classList.contains("visible")
+    ? followersModalScreen.classList.remove("visible")
+    : followersModalScreen.classList.add("visible");
 
 //   modal.innerHTML = "";
 //   modal.insertAdjacentHTML(
@@ -297,14 +300,26 @@ followersButton.addEventListener("click", () => {
 });
 
 const modalCloseHandler = () => {
-  modalScreen.classList.remove("visible");
+  modalScreen.forEach((element) => {
+    element.classList.remove("visible");
+  })
 };
 const modalOpenHandler = () => {
-  modalScreen.classList.add("visible");
+    modalScreen.forEach((element) => {
+    element.classList.add("visible");
+  })
 };
 
+const verificationModalCloseHandler = () => {
+    verificationModalScreen.classList.remove("visible");
+};
+const verificationModalOpenHandler = () => {
+    verificationModalScreen.classList.add("visible");
+};
+
+
 sendVerificationButton.addEventListener("click", (event) => {
-  modalOpenHandler();
+  verificationModalOpenHandler();
   modal.innerHTML = "";
   modal.insertAdjacentHTML(
     "afterbegin",
@@ -314,7 +329,7 @@ sendVerificationButton.addEventListener("click", (event) => {
     <div class="pl-5">
         Verify Email
     </div>
-    <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+    <button onclick="verificationModalCloseHandler()" id="close-button" class="max-w-max flex-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -338,7 +353,7 @@ Send verification
 });
 
 const codeSentHandler = (event) => {
-  modalOpenHandler();
+  verificationModalOpenHandler();
   modal.innerHTML = "";
   modal.insertAdjacentHTML(
     "afterbegin",
@@ -348,7 +363,7 @@ const codeSentHandler = (event) => {
     <div class="pl-5">
     Enter the code
     </div>
-    <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+    <button onclick="verificationModalCloseHandler()" id="close-button" class="max-w-max flex-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -381,7 +396,7 @@ const redirector = () => {
 };
 
 const successfullyVerification = () => {
-  modalOpenHandler();
+  verificationModalOpenHandler();
   modal.innerHTML = "";
   modal.insertAdjacentHTML(
     "afterbegin",
@@ -391,7 +406,7 @@ const successfullyVerification = () => {
     <div class="pl-5">
     Successful
     </div>
-    <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+    <button onclick="verificationModalCloseHandler()" id="close-button" class="max-w-max flex-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -411,7 +426,7 @@ CONTINUE
 };
 
 const failureVerification = () => {
-  modalOpenHandler();
+  verificationModalOpenHandler();
   modal.innerHTML = "";
   modal.insertAdjacentHTML(
     "afterbegin",
@@ -421,7 +436,7 @@ const failureVerification = () => {
     <div class="pl-5">
     Failed
     </div>
-    <button onclick="modalCloseHandler()" id="close-button" class="max-w-max flex-center">
+    <button onclick="verificationModalCloseHandler()" id="close-button" class="max-w-max flex-center">
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
             stroke="currentColor" class="w-6 h-6">
             <path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12" />
@@ -448,14 +463,20 @@ const verifyCodeHandler = (OTP) => {
   }
 };
 
-modalScreen.addEventListener("click", (event) => {
-  modalCloseHandler();
-});
+modalScreen.forEach((screen) => {
+  screen.addEventListener("click", (event) => {
+    if (event.target === screen) {
+      modalCloseHandler();
+    }
+  });
+})
 
-document.onkeydown = (event) => {
-  const { keyCode } = event;
-  keyCode === 27 && modalScreen.classList.remove("visible");
-};
+document.addEventListener("click", (event) => {
+  const target = event.target;
+  if (target.matches(".modal-screen")) {
+    modalCloseHandler();
+  }
+});
 
 const tabsFunc = () => {
   buttonsContainer.innerHTML = "";

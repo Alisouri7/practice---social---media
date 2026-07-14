@@ -15,33 +15,42 @@ exports.getPage = async (req, res, next) => {
         const followStatus = await followModel.findOne({ follower: userID, following: pageID }).lean();
 
 
-        const page = await userModel.findOne({_id: pageID}, 'name username biography isVerified').lean();
+        const page = await userModel.findOne({ _id: pageID }, 'name username biography isVerified').lean();
 
-        console.log(page);
-        
+
+
         if (!hasAccess) {
             req.flash('error', 'Follow Page To Show Content')
             return res.render('./Pages/Profiles/index', {
                 followStatus: Boolean(followStatus),
                 pageID,
                 followers: [],
-                page
+                page,
+                followings: [],
+                hasAccess: false
             })
         };
 
 
-        let followers = await followModel.find({ following: pageID}).populate('follower', 'username name').lean();
+        let followers = await followModel.find({ following: pageID }).populate('follower', 'username name').lean();
 
         followers = followers.map((item) => {
-           return item.follower
+            return item.follower
         });
 
-        
+        let followings = await followModel.find({ follower: pageID }).populate('following', 'username name').lean();
+
+        followings = followings.map((item) => {
+            return item.following
+        });
+
         res.render('./Pages/Profiles/index', {
             followStatus: Boolean(followStatus),
             pageID,
             followers,
-            page
+            page,
+            followings,
+            hasAccess: true
         })
     } catch (err) {
         next(err)
