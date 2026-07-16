@@ -17,7 +17,8 @@ exports.showEditPageView = async (req, res, next) => {
 exports.updateProfile = async (req, res, next) => {
     try {
         const userID = req.user._id;
-
+        const {name, username, email, password} = req.body;
+        
         if (!req.file) {
             req.flash('error', 'choose a photo')
             return res.redirect('/users/edit-profile')
