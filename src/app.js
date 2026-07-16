@@ -10,6 +10,7 @@ const path = require('path');
 const authRouter = require('./modules/auth/routes/auth');
 const postRouter = require('./modules/posts/routes/post');
 const pageRouter = require('./modules/pages/routes/router');
+const userRouter = require('./modules/users/routes/user');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -55,6 +56,7 @@ app.use('/posts', postRouter);
 
 app.use('/pages', pageRouter);
 
+app.use('/users', userRouter);
 //404 error handler
 
 app.use((req, res) => {
