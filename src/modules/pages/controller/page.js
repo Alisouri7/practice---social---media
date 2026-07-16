@@ -8,7 +8,7 @@ const mongoose = require('mongoose');
 exports.getPage = async (req, res, next) => {
     try {
         const userID = req.user._id.toString();
-
+        const {name, username, email, password} = req.body;
         const { pageID } = req.params;
 
         const hasAccess = await hasAccessToPage(userID, pageID);
@@ -16,7 +16,7 @@ exports.getPage = async (req, res, next) => {
         const followStatus = await followModel.findOne({ follower: userID, following: pageID }).lean();
 
 
-        const page = await userModel.findOne({ _id: pageID }, 'name username biography isVerified').lean();
+        const page = await userModel.findOne({ _id: pageID }, 'name username biography isVerified profilePicture').lean();
 
 
 

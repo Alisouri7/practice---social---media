@@ -59,7 +59,7 @@
 
                     <!-- Profile Image -->
                     <span class="profile-pic-card">
-                        <img src="/images/profile-3.jpg" class="profile-pic" alt="">
+                        <img src="http://localhost:4002<%= page.profilePicture%>" class="profile-pic" alt="profilePicture">
                     </span>
                 </header>
                 <main class="profile-main">
@@ -116,7 +116,7 @@
                         <!-- Manage -->
                         <div class="flex items-center gap-2">
                             <% if (own) { %>
-                                <a href="/src/Pages/ProfileUpdate/index.html"
+                                <a href="/users/edit-profile"
                                     class="min-w-max flex items-center gap-1 manage-button">
                                     <span>
                                         Manage
@@ -198,7 +198,7 @@
                             <article class="profile-feed-card">
                                 <div>
                                     <header>
-                                        <img src="http://localhost:4002/images/profile-1.jpg" alt="profile picture"
+                                        <img src="http://localhost:4002<%= page.profilePicture%>" alt="profile picture"
                                             class="feed-profile-picture">
                                     </header>
                                 </div>
