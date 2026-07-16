@@ -2,6 +2,7 @@
 const hasAccessToPage = require("./../../../utils/hasAccessToPage");
 const followModel = require('./../../follower/model/Follower');
 const userModel = require('./../../users/model/User');
+const postModel = require('./../../posts/model/Post');
 const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
@@ -27,7 +28,8 @@ exports.getPage = async (req, res, next) => {
                 followers: [],
                 page,
                 followings: [],
-                hasAccess: false
+                hasAccess: false,
+                posts: []
             })
         };
 
@@ -44,13 +46,19 @@ exports.getPage = async (req, res, next) => {
             return item.following
         });
 
+        const posts = await postModel.find({user: pageID}).populate('user', "name username");
+        
+        const own = userID === pageID;
+        
         res.render('./Pages/Profiles/index', {
             followStatus: Boolean(followStatus),
             pageID,
             followers,
             page,
             followings,
-            hasAccess: true
+            hasAccess: true,
+            posts,
+            own
         })
     } catch (err) {
         next(err)
