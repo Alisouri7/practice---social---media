@@ -11,4 +11,7 @@ router.route('/')
     .get(authMiddleware, isAccountVerifiedMiddleware, postController.showPostUploadView)
     .post(authMiddleware,  upload.single('media'), postController.createPost);
 
+router.route('/like').post(authMiddleware, postController.like);
+router.route('/dislike').post(authMiddleware, postController.dislike);
+
 module.exports = router;

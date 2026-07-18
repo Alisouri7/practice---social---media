@@ -21,7 +21,7 @@ module.exports = async (req, res, next) => {
 
         const userID = payload.userID;
 
-        const user = await userModel.findOne({ _id: userID });
+        const user = await userModel.findOne({ _id: userID }).lean();
 
         if (!user) {
             req.flash('error', 'Please Login First')
@@ -29,7 +29,7 @@ module.exports = async (req, res, next) => {
 
         }
 
-        // Reflect.deleteProperty(user, 'password');
+        Reflect.deleteProperty(user, 'password');
         
         req.user = user;
 

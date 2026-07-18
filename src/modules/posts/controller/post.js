@@ -1,5 +1,7 @@
 const postModel = require('./../model/Post');
 const createPostValidator = require('./../../../utils/validators/createPostValidator');
+const hasAccessToPage = require('./../../../utils/hasAccessToPage');
+const likeModel = require('./../../like/model/Like');
 
 exports.showPostUploadView = async (req, res) => {
     return res.render('./Pages/PostUpload/index')
@@ -16,7 +18,7 @@ exports.createPost = async (req, res, next) => {
             return res.redirect('/posts')
         }
 
-        await createPostValidator.validate({description}, {abortEarly: false});
+        await createPostValidator.validate({ description }, { abortEarly: false });
 
 
         //create new post
@@ -33,9 +35,55 @@ exports.createPost = async (req, res, next) => {
         });
 
         await post.save();
-        
+
         req.flash('success', 'Post Created Successfully:)')
         return res.redirect('/posts')
+
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.like = async (req, res, next) => {
+    try {
+        const user = req.user;
+        const { postID } = req.body;
+
+        const post = await postModel.findOne({ _id: postID }).lean();
+
+        if (!post) {
+            req.flash('error', 'Post Not Found!')
+            return res.redirect('/back')
+        };
+
+        const hasAccess = await hasAccessToPage(user._id, post.user.toString());
+
+        if (!hasAccess) {
+            req.flash('error', 'You Dont Have Access To This Page!')
+            return res.redirect('/back')
+        };
+
+        const isLikeExist = await likeModel.findOne({ user: user._id, post: postID }).lean();
+
+        if (isLikeExist) {
+            return res.redirect('back')
+        };
+
+        const like = new likeModel({
+            post: postID,
+            user: user._id
+        });
+
+        like.save();
+
+        return res.redirect('back')
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.dislike = async (req, res, next) => {
+    try {
 
     } catch (error) {
         next(error)
