@@ -20,7 +20,7 @@ app.use(express.urlencoded({extended: true, limit: '50mb'}));
 app.use(cookieParser(process.env.JWT_SECRET))
 
 //cors policy
-app.use(setHeaders);
+// app.use(setHeaders);
 
 
 //express-flash

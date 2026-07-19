@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const userModel = require('./../../modules/users/model/User');
+const mongoose = require('mongoose');
 
 
 module.exports = async (req, res, next) => {
@@ -21,8 +22,9 @@ module.exports = async (req, res, next) => {
 
         const userID = payload.userID;
 
-        const user = await userModel.findOne({ _id: userID }).lean();
-
+        const user = await userModel.findOne({ _id: new mongoose.Types.ObjectId(userID) }).lean();
+        
+        
         if (!user) {
             req.flash('error', 'Please Login First')
             return res.redirect('/auth/login')

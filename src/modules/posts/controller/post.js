@@ -2,6 +2,7 @@ const postModel = require('./../model/Post');
 const createPostValidator = require('./../../../utils/validators/createPostValidator');
 const hasAccessToPage = require('./../../../utils/hasAccessToPage');
 const likeModel = require('./../../like/model/Like');
+const mongoose = require('mongoose');
 
 exports.showPostUploadView = async (req, res) => {
     return res.render('./Pages/PostUpload/index')
@@ -48,25 +49,25 @@ exports.like = async (req, res, next) => {
     try {
         const user = req.user;
         const { postID } = req.body;
-
+        
         const post = await postModel.findOne({ _id: postID }).lean();
 
         if (!post) {
             req.flash('error', 'Post Not Found!')
-            return res.redirect('/back')
+            return res.redirect(req.get('Referer'))
         };
 
-        const hasAccess = await hasAccessToPage(user._id, post.user.toString());
-
+        const hasAccess = await hasAccessToPage(user._id , post.user);
+        
         if (!hasAccess) {
             req.flash('error', 'You Dont Have Access To This Page!')
-            return res.redirect('/back')
+            return res.redirect(req.get('Referer'))
         };
 
         const isLikeExist = await likeModel.findOne({ user: user._id, post: postID }).lean();
 
         if (isLikeExist) {
-            return res.redirect('back')
+            return res.redirect(req.get('Referer'))
         };
 
         const like = new likeModel({
@@ -74,9 +75,9 @@ exports.like = async (req, res, next) => {
             user: user._id
         });
 
-        like.save();
+        await like.save();
 
-        return res.redirect('back')
+        return res.redirect(req.get('Referer'))
     } catch (error) {
         next(error)
     }

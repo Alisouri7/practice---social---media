@@ -7,6 +7,7 @@ const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
     try {
+        
         const userID = req.user._id.toString();
         
         const { pageID } = req.params;
