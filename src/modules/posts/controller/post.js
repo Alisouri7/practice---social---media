@@ -47,6 +47,7 @@ exports.createPost = async (req, res, next) => {
 
 exports.like = async (req, res, next) => {
     try {
+    
         const user = req.user;
         const { postID } = req.body;
         
@@ -67,7 +68,7 @@ exports.like = async (req, res, next) => {
         const isLikeExist = await likeModel.findOne({ user: user._id, post: postID }).lean();
 
         if (isLikeExist) {
-            return res.redirect(req.get('Referer'))
+            return res.redirect(req.get('referer'))
         };
 
         const like = new likeModel({
