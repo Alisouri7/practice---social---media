@@ -47,10 +47,10 @@ exports.createPost = async (req, res, next) => {
 
 exports.like = async (req, res, next) => {
     try {
-    
+
         const user = req.user;
         const { postID } = req.body;
-        
+
         const post = await postModel.findOne({ _id: postID }).lean();
 
         if (!post) {
@@ -58,8 +58,8 @@ exports.like = async (req, res, next) => {
             return res.redirect(req.get('Referer'))
         };
 
-        const hasAccess = await hasAccessToPage(user._id , post.user);
-        
+        const hasAccess = await hasAccessToPage(user._id, post.user);
+
         if (!hasAccess) {
             req.flash('error', 'You Dont Have Access To This Page!')
             return res.redirect(req.get('Referer'))
@@ -86,6 +86,18 @@ exports.like = async (req, res, next) => {
 
 exports.dislike = async (req, res, next) => {
     try {
+        const user = req.user;
+        const { postID } = req.body;
+
+        const like = await likeModel.findOne({ user: user._id, post: postID }).lean();
+
+        if (!like) {
+            return res.redirect(req.get('Referer'))
+        };
+
+        await likeModel.findOneAndDelete({_id: like._id}).lean();
+
+        return res.redirect(req.get('Referer'))
 
     } catch (error) {
         next(error)
