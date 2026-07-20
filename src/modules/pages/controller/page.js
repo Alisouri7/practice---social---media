@@ -3,13 +3,14 @@ const hasAccessToPage = require("./../../../utils/hasAccessToPage");
 const followModel = require('./../../follower/model/Follower');
 const userModel = require('./../../users/model/User');
 const postModel = require('./../../posts/model/Post');
+const likeModel = require('./../../like/model/Like');
 const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
     try {
-        
+
         const userID = req.user._id.toString();
-        
+
         const { pageID } = req.params;
 
         const hasAccess = await hasAccessToPage(userID, pageID);
@@ -47,10 +48,35 @@ exports.getPage = async (req, res, next) => {
             return item.following
         });
 
-        const posts = await postModel.find({user: pageID}).populate('user', "name username");
-        
-        const own = userID === pageID;
-        
+        const posts = await postModel.find({ user: pageID }).populate('user', "name username").lean();
+
+        const likes = await likeModel.find({ user: userID }).lean();
+
+        let postsWithLikes = [];
+
+        // posts.forEach((post) => {
+        //     if (likes.length) {
+        //         likes.forEach((like) => {
+        //             if (like.post.toString() === post._id.toString()) {
+        //                 postsWithLikes.push({ ...post, hasLike: true });
+        //             } else {
+        //                 postsWithLikes.push({ ...post });
+        //             }
+        //         })
+        //     } else {
+        //         postsWithLikes = [...posts];
+        //     }
+        // })
+
+        const likesIDs = new Set(likes.map(like => like.post.toString()));
+
+        postsWithLikes = posts.map(post => {
+            return { ...post, hasLike: likesIDs.has(post._id.toString()) }
+        });
+
+
+        const own = userID === pageID;          //showing manage button
+
         res.render('./Pages/Profiles/index', {
             followStatus: Boolean(followStatus),
             pageID,
@@ -58,7 +84,7 @@ exports.getPage = async (req, res, next) => {
             page,
             followings,
             hasAccess: true,
-            posts,
+            posts: postsWithLikes,
             own
         })
     } catch (err) {
