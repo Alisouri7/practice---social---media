@@ -126,7 +126,7 @@ exports.save = async (req, res, next) => {
 
         const isSaveExist = await saveModel.findOne({ user: user._id, post: postID }).lean();
 
-        if (isLikeExist) {
+        if (isSaveExist) {
             return res.redirect(req.get('referer'))
         };
 
@@ -146,7 +146,18 @@ exports.save = async (req, res, next) => {
 
 exports.unsave = async (req, res, next) => {
     try {
+        const user = req.user;
+        const { postID } = req.body;
 
+        const save = await saveModel.findOne({ user: user._id, post: postID }).lean();
+
+        if (!save) {
+            return res.redirect(req.get('Referer'))
+        };
+
+        await saveModel.findOneAndDelete({ _id: save._id }).lean();
+
+        return res.redirect(req.get('Referer'))
     } catch (error) {
         next(error)
     }

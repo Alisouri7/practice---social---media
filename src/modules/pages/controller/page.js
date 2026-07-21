@@ -4,6 +4,7 @@ const followModel = require('./../../follower/model/Follower');
 const userModel = require('./../../users/model/User');
 const postModel = require('./../../posts/model/Post');
 const likeModel = require('./../../like/model/Like');
+const saveModel = require('./../../save/model/Save');
 const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
@@ -52,26 +53,18 @@ exports.getPage = async (req, res, next) => {
 
         const likes = await likeModel.find({ user: userID }).lean();
 
-        let postsWithLikes = [];
+        const saves = await saveModel.find({ user: userID }).lean();
 
-        // posts.forEach((post) => {
-        //     if (likes.length) {
-        //         likes.forEach((like) => {
-        //             if (like.post.toString() === post._id.toString()) {
-        //                 postsWithLikes.push({ ...post, hasLike: true });
-        //             } else {
-        //                 postsWithLikes.push({ ...post });
-        //             }
-        //         })
-        //     } else {
-        //         postsWithLikes = [...posts];
-        //     }
-        // })
+
+        let postsWithLikesAndSave = [];
+
 
         const likesIDs = new Set(likes.map(like => like.post.toString()));
 
-        postsWithLikes = posts.map(post => {
-            return { ...post, hasLike: likesIDs.has(post._id.toString()) }
+        const savesIDs = new Set(saves.map(save => save.post.toString()));
+
+        postsWithLikesAndSave = posts.map(post => {
+            return { ...post, hasLike: likesIDs.has(post._id.toString()), saved: savesIDs.has(post._id.toString()) }
         });
 
 
@@ -84,7 +77,7 @@ exports.getPage = async (req, res, next) => {
             page,
             followings,
             hasAccess: true,
-            posts: postsWithLikes,
+            posts: postsWithLikesAndSave,
             own
         })
     } catch (err) {
