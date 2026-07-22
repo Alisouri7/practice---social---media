@@ -164,9 +164,26 @@ exports.unsave = async (req, res, next) => {
 };
 
 exports.showSavesView = async (req, res, next) => {
-    return res.render('./Pages/Bookmarks/index');
-
+    
     try {
+        const user = req.user;
+        
+        const saves = await saveModel.find({user: user._id}).populate('post').populate('user', 'name username profilePicture').lean();
+        
+        const likes = await likeModel.find({ user: user._id}).lean();
+
+        saves.forEach(item => {
+            likes.forEach( like => {
+                if (item.post._id.toString() === like.post._id.toString()) {
+                    item.post.hasLike = true
+                }
+            })
+        });
+        
+        return res.render('./Pages/Bookmarks/index', {
+            saves
+        });
+
         
     } catch (error) {
         next(error)
