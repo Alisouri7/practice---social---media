@@ -161,4 +161,14 @@ exports.unsave = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
+
+exports.showSavesView = async (req, res) => {
+    return res.render('./Pages/Bookmarks/index');
+
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+};
