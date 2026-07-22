@@ -163,7 +163,7 @@ exports.unsave = async (req, res, next) => {
     }
 };
 
-exports.showSavesView = async (req, res) => {
+exports.showSavesView = async (req, res, next) => {
     return res.render('./Pages/Bookmarks/index');
 
     try {
