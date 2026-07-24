@@ -1,3 +1,9 @@
+const getUserInfo = require("../../../utils/getUserInfo")
+
 exports.showHomeView = async (req, res, next) => {
- return res.render('./index')
+    const user = await getUserInfo(req.user._id);
+
+    return res.render('./index', {
+    user
+    })
 }

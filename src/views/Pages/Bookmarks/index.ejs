@@ -31,12 +31,17 @@
                 <input placeholder="Search in Neko Social .." type="text" class="bg-transparent px-8 w-full h-full">
             </div>
             <div class="flex gap-6 items-center">
-                <a class="create-button bg-indigo-600" href="/src/Pages/PostUpload/index.html">
+                <a class="create-button bg-indigo-600" href="/posts/">
                     Create
                 </a>
                 <div class="w-12 h-12 rounded-full overflow-hidden rounded-full">
                     <button id="profileButton" class="w-full h-full bg-transparent border-none">
-                        <img src="/images/profile-8.jpg" class="object-cover" alt="profile cover">
+                        <% if (user.profilePicture) { %>
+                            <img src="http://localhost:4002<%= user.profilePicture%>" class="object-cover" alt="profile cover">
+                        <% } else { %>
+                            <img src="http://localhost:4002/images/profiles/default-user.png" class="object-cover" alt="profile cover">
+                        <% } %>
+                        
                     </button>
                 </div>
 
@@ -51,14 +56,18 @@
             <!-- Profile Card -->
             <article class="profile-card shadow px-4">
                 <div>
-                    <img src="http://localhost:4002<%= saves[0].user.profilePicture %>" class="w-12 h-12 rounded-full" alt="Peyman Ahmadi">
+                    <% if (user.profilePicture) { %>
+                            <img src="http://localhost:4002<%= user.profilePicture%>" class="w-12 h-12 rounded-full" alt="profile cover">
+                    <% } else { %>
+                            <img src="http://localhost:4002/images/profiles/default-user.png" class="w-12 h-12 rounded-full" alt="profile cover">
+                    <% } %>
                 </div>
                 <div>
                     <p class="user-profile-name text-gray-900 font-Poppins-Bold text-sm">
-                        <%= saves[0].user.name%>
+                        <%= user.name%>
                     </p>
                     <p class="font-Poppins-Light text-xs text-gray-500">
-                        @<%= saves[0].user.username%>
+                        @<%= user.username%>
                     </p>
                 </div>
             </article>
@@ -193,9 +202,9 @@
             </section>
 
             <!-- Create a post -->
-            <button class="h-10 rounded-2xl flex-center text-white bg-indigo-700">
+            <a href="/posts/" class="h-10 rounded-2xl flex-center text-white bg-indigo-700" style="color: #ffffff;">
                 Create post
-            </button>
+            </a>
         </aside>
 
         <!-- Content -->

@@ -4,6 +4,7 @@ const hasAccessToPage = require('./../../../utils/hasAccessToPage');
 const likeModel = require('./../../like/model/Like');
 const saveModel = require('./../../save/model/Save');
 const mongoose = require('mongoose');
+const getUserInfo = require('../../../utils/getUserInfo');
 
 exports.showPostUploadView = async (req, res) => {
     return res.render('./Pages/PostUpload/index')
@@ -179,9 +180,12 @@ exports.showSavesView = async (req, res, next) => {
                 }
             })
         });
+
+        const userInfo = await getUserInfo(user._id);
         
         return res.render('./Pages/Bookmarks/index', {
-            saves
+            saves,
+            user: userInfo
         });
 
         
