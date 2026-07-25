@@ -169,7 +169,15 @@ exports.showSavesView = async (req, res, next) => {
     try {
         const user = req.user;
         
-        const saves = await saveModel.find({user: user._id}).populate('post').populate('user', 'name username profilePicture').lean();
+        const saves = await saveModel.find({user: user._id}).lean()
+        .populate({
+            path: 'post',
+            populate: {
+                path: 'user'
+            }
+        })
+        .populate('user', 'name username profilePicture');
+        
         
         const likes = await likeModel.find({ user: user._id}).lean();
 
