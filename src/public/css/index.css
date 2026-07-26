@@ -18,6 +18,10 @@ input {
     font-family: 'Poppins-Regular' !important;
 }
 
+.relative {
+  position: relative;
+}
+
 .max-w-max {
     width: max-content;
 }
