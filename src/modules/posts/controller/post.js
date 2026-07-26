@@ -5,6 +5,9 @@ const likeModel = require('./../../like/model/Like');
 const saveModel = require('./../../save/model/Save');
 const mongoose = require('mongoose');
 const getUserInfo = require('../../../utils/getUserInfo');
+const path = require('path');
+const fs = require('fs');
+
 
 exports.showPostUploadView = async (req, res) => {
     return res.render('./Pages/PostUpload/index')
@@ -165,24 +168,24 @@ exports.unsave = async (req, res, next) => {
 };
 
 exports.showSavesView = async (req, res, next) => {
-    
+
     try {
         const user = req.user;
-        
-        const saves = await saveModel.find({user: user._id}).lean()
-        .populate({
-            path: 'post',
-            populate: {
-                path: 'user'
-            }
-        })
-        .populate('user', 'name username profilePicture');
-        
-        
-        const likes = await likeModel.find({ user: user._id}).lean();
+
+        const saves = await saveModel.find({ user: user._id }).lean()
+            .populate({
+                path: 'post',
+                populate: {
+                    path: 'user'
+                }
+            })
+            .populate('user', 'name username profilePicture');
+
+
+        const likes = await likeModel.find({ user: user._id }).lean();
 
         saves.forEach(item => {
-            likes.forEach( like => {
+            likes.forEach(like => {
                 if (item.post._id.toString() === like.post._id.toString()) {
                     item.post.hasLike = true
                 }
@@ -190,14 +193,47 @@ exports.showSavesView = async (req, res, next) => {
         });
 
         const userInfo = await getUserInfo(user._id);
-        
+
         return res.render('./Pages/Bookmarks/index', {
             saves,
             user: userInfo
         });
 
-        
+
     } catch (error) {
         next(error)
     }
 };
+
+exports.removePost = async (req, res, next) => {
+    try {
+        const user = req.user;
+        const { postID } = req.params;
+        
+        const post = await postModel.findOne({ _id: postID }).lean();
+        
+        if (!post || post.user.toString() !== user._id.toString()) {
+            req.flash('error', 'You Cant Remove This Post')
+            return res.redirect(req.headers.referer)
+        };
+        
+        const mediaPath = path.join(__dirname, '/..', '/..', '/..', '/public', post.media.path);
+        
+
+        fs.unlinkSync(mediaPath, (err) => {
+            next(err)
+        });
+
+        await postModel.findByIdAndDelete(postID).lean();
+
+        await likeModel.deleteMany({ post: postID });
+
+        await saveModel.deleteMany({ post: postID });
+
+        req.flash('success', 'Post Removed Successfully');
+        return res.redirect(req.headers.referer)
+
+    } catch (error) {
+        next(error)
+    }
+}
