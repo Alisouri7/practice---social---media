@@ -21,6 +21,14 @@ const schema = mongoose.Schema({
     }
 }, { timestamps: true });
 
+schema.pre('save', function (next) {
+    if (this.parent) {
+        this.isReply = true
+    }
+
+    next()
+});
+
 const model = mongoose.model('Comment', schema);
 
 module.exports = model;
