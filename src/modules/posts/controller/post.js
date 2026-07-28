@@ -3,6 +3,7 @@ const createPostValidator = require('./../../../utils/validators/createPostValid
 const hasAccessToPage = require('./../../../utils/hasAccessToPage');
 const likeModel = require('./../../like/model/Like');
 const saveModel = require('./../../save/model/Save');
+const commentModel = require('./../../comments/model/Comment');
 const mongoose = require('mongoose');
 const getUserInfo = require('../../../utils/getUserInfo');
 const path = require('path');
@@ -209,16 +210,16 @@ exports.removePost = async (req, res, next) => {
     try {
         const user = req.user;
         const { postID } = req.params;
-        
+
         const post = await postModel.findOne({ _id: postID }).lean();
-        
+
         if (!post || post.user.toString() !== user._id.toString()) {
             req.flash('error', 'You Cant Remove This Post')
             return res.redirect(req.headers.referer)
         };
-        
+
         const mediaPath = path.join(__dirname, '/..', '/..', '/..', '/public', post.media.path);
-        
+
 
         fs.unlinkSync(mediaPath, (err) => {
             next(err)
@@ -236,4 +237,46 @@ exports.removePost = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
+};
+
+exports.addComment = async (req, res, next) => {
+    try {
+        const user = req.user;
+        const { content, postID } = req.body;
+        let parentID = req.body.parent;
+
+        // if (!user.isVerified) {
+        //     req.flash('error', 'Verify Your Account')
+        //     return res.redirect(req.get('Referer'))
+        // };
+
+        const post = await postModel.findOne({ _id: postID }).lean();
+
+        if (!post) {
+            req.flash('error', 'This Post Not Exist')
+            return res.redirect(req.get('Referer'))
+        };
+
+        if (!parentID) {
+            const comment = new commentModel({
+                content,
+                post: postID,
+                user: user._id
+            });
+
+            await comment.save()
+        } else {
+            const comment = new commentModel({
+                content,
+                post: postID,
+                user: user._id,
+                parent: parentID
+            });
+
+            await comment.save()
+        }
+    } catch (error) {
+        next(error)
+    }
 }
+
