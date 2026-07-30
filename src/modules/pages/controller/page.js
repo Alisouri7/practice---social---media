@@ -5,6 +5,7 @@ const userModel = require('./../../users/model/User');
 const postModel = require('./../../posts/model/Post');
 const likeModel = require('./../../like/model/Like');
 const saveModel = require('./../../save/model/Save');
+
 const mongoose = require('mongoose');
 
 exports.getPage = async (req, res, next) => {
@@ -66,6 +67,7 @@ exports.getPage = async (req, res, next) => {
         postsWithLikesAndSave = posts.map(post => {
             return { ...post, hasLike: likesIDs.has(post._id.toString()), saved: savesIDs.has(post._id.toString()) }
         });
+
 
 
         const own = userID === pageID;          //showing manage button

@@ -265,6 +265,9 @@ exports.addComment = async (req, res, next) => {
             });
 
             await comment.save()
+
+            req.flash('success', 'Comment Added')
+            return res.redirect(req.get('Referer'))
         } else {
             const comment = new commentModel({
                 content,
@@ -274,9 +277,26 @@ exports.addComment = async (req, res, next) => {
             });
 
             await comment.save()
+
+            req.flash('success', 'Comment Aded')
+            return res.redirect(req.get('Referer'))
         }
     } catch (error) {
         next(error)
     }
 }
 
+
+exports.getComments = async (req, res, next) => {
+    try {
+        const {postID} = req.body;
+        
+        const comments = await commentModel.find({post: postID}).populate('user').lean();
+        
+        
+        res.json(comments)
+        
+    } catch (error) {
+        next(error)
+    }
+}

@@ -26,7 +26,6 @@ schema.pre('save', function (next) {
         this.isReply = true
     }
 
-    next()
 });
 
 const model = mongoose.model('Comment', schema);

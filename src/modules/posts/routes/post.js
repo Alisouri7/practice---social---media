@@ -19,6 +19,7 @@ router.route('/unsave').post(authMiddleware, postController.unsave);
 
 router.route('/:postID/remove').post(authMiddleware, postController.removePost);
 
-
+router.route('/comments').post(authMiddleware, postController.getComments);
+router.route('/new-comment').post(authMiddleware, postController.addComment);
 
 module.exports = router;

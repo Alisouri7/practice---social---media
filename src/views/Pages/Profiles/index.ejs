@@ -276,7 +276,11 @@
                                                             </button>
                                                         </form>
                                                         <% } %>
-                                                            <button onclick="commentIconClickHandler('<%= post._id %>')"
+
+                                                            <!-- comments -->
+
+                                                            <button type="submit"
+                                                                onclick="commentIconClickHandler('<%= post._id %>')"
                                                                 class="max-w-max comment-icon">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke-width="1.5"
@@ -286,6 +290,9 @@
                                                                 </svg>
 
                                                             </button>
+
+
+
                                                             <button class="max-w-max">
                                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                     viewBox="0 0 24 24" stroke-width="1.5"
@@ -785,40 +792,9 @@
                             Comments</p>
                     </div>
 
-                    <div class="border bg-gray-100 p-5 my-3 rounded-md shadow-sm">
-                        <div class="flex items-center gap-2 mb-1">
-                            <img src="http://localhost:4001/images/profiles/default-user.png" class="w-9 rounded-full"
-                                alt="Profile Image" />
-                            <div>
-                                <span class="text-sm text-gray-600"> Amin Saeedi </span>
-                                <p class="text-xs text-gray-500">20 April 2024</p>
-                            </div>
-                        </div>
-                        <div class="ml-6 pl-4 mt-4">
-                            <q> I love this post :)) </q>
-                        </div>
-                        <div class="mt-4 flex-between">
-                            <div class="flex items-center gap-1">
-                                <button class="flex items-center gap-1">
-                                    <span>
-                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                            stroke-width="1.5" stroke="currentColor" class="w-4 text-gray-600 h-5">
-                                            <path stroke-linecap="round" stroke-linejoin="round"
-                                                d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
-                                        </svg>
-                                    </span>
-                                    <span class="pb-1">+1</span>
-                                </button>
-                            </div>
-                            <button id="reply-button" onclick="addParentCommentID(11)"
-                                class="max-w-max w-8 h-8 flex-center bg-gray-100 rounded-md border">
-                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-600">
-                                    <path stroke-linecap="round" stroke-linejoin="round"
-                                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
-                                </svg>
-                            </button>
-                        </div>
+                    <div id="comments-container" class="border bg-gray-100 p-5 my-3 rounded-md shadow-sm">
+                        <!-- comments -->
+
                     </div>
 
                 </footer>
@@ -845,12 +821,64 @@
         };
 
 
-        function commentIconClickHandler(postID) {
+        async function commentIconClickHandler(postID) {
             const modal = document.querySelector('#comments-modal')
             const commentForm = document.querySelector('#comment-form')
             const commentFormInputs = commentForm.querySelectorAll('input')
-            const replyButton = document.querySelector('#reply-button');
+            const commentsContainer = document.querySelector('#comments-container');
 
+            commentsContainer.innerHTML = '';
+            
+            const res = await fetch('http://localhost:4002/posts/comments', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    postID
+                })
+            });
+            
+            const comments = await res.json();
+            
+            comments.forEach( comment => {
+                commentsContainer.insertAdjacentHTML('afterbegin', `
+                            <div class="flex items-center gap-2 mb-1">
+                            <img src=${comment.user?.profilePicture ? `http://localhost:4002${comment.user.profilePicture}` : "http://localhost:4002/images/profiles/default-user.png"}  class="w-9 rounded-full"
+                                alt="Profile Image" />
+                            <div>
+                                <span class="text-sm text-gray-600"> ${comment.user.name} </span>
+                                <p class="text-xs text-gray-500">20 April 2024</p>
+                            </div>
+                        </div>
+                        <div class="ml-6 pl-4 mt-4">
+                            <q>${comment.content}</q>
+                        </div>
+                        <div class="mt-4 flex-between">
+                            <div class="flex items-center gap-1">
+                                <button class="flex items-center gap-1">
+                                    <span>
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                            stroke-width="1.5" stroke="currentColor" class="w-4 text-gray-600 h-5">
+                                            <path stroke-linecap="round" stroke-linejoin="round"
+                                                d="M15.182 15.182a4.5 4.5 0 0 1-6.364 0M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0ZM9.75 9.75c0 .414-.168.75-.375.75S9 10.164 9 9.75 9.168 9 9.375 9s.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Zm5.625 0c0 .414-.168.75-.375.75s-.375-.336-.375-.75.168-.75.375-.75.375.336.375.75Zm-.375 0h.008v.015h-.008V9.75Z" />
+                                        </svg>
+                                    </span>
+                                    <span class="pb-1">+1</span>
+                                </button>
+                            </div>
+                            <button id="reply-button" onclick="addParentCommentID(event, '${comment._id}')"
+                                class="max-w-max w-8 h-8 flex-center bg-gray-100 rounded-md border">
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
+                                    stroke-width="1.5" stroke="currentColor" class="w-4 h-4 text-gray-600">
+                                    <path stroke-linecap="round" stroke-linejoin="round"
+                                        d="M9 15 3 9m0 0 6-6M3 9h12a6 6 0 0 1 0 12h-3" />
+                                </svg>
+                            </button>
+                        </div>
+                `)
+            })
+            
             modal.classList.add('visible')
 
             commentFormInputs.forEach(input => input.remove())
@@ -862,10 +890,26 @@
             )
         };
 
-        function addParentCommentID(parentCommentID) {
+        function addParentCommentID(event, parentCommentID) {
+            event.stopPropagation();
             const commentForm = document.querySelector('#comment-form');
-            const replyButton = document.querySelectorAll('#reply-button');
-            const parentInput = document.querySelector(`input[value="${parentCommentID}"]`);
+            const replyButtons = document.querySelectorAll('#reply-button');
+            const parentInput = document.querySelector(`input[name="parent"]`);
+            const currentBtn = event.currentTarget;
+
+            const wasActive = currentBtn.classList.contains('isActive');
+
+
+            if (wasActive) {
+                // اگر روی دکمه فعال کلیک شد، پاسخ لغو شود
+                currentBtn.classList.remove('isActive');
+                parentInput?.remove();
+                return;
+            }
+
+            replyButtons.forEach(btn => btn.classList.remove('isActive'));
+
+            currentBtn.classList.add('isActive');
 
             if (!parentInput) {
                 commentForm.insertAdjacentHTML('afterbegin',
@@ -874,10 +918,8 @@
           `
                 )
 
-                // replyButton.classList.toggle('isActive')
             } else {
                 parentInput.value = parentCommentID;
-                // replyButton.classList.toggle('isActive')
             }
 
         };
