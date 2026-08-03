@@ -12,6 +12,7 @@ const authRouter = require('./modules/auth/routes/auth');
 const postRouter = require('./modules/posts/routes/post');
 const pageRouter = require('./modules/pages/routes/router');
 const userRouter = require('./modules/users/routes/user');
+const apiDocRouter = require('./configs/swagger/routes/swagger');
 
 app.use(express.json({limit: '50mb'}));
 app.use(express.urlencoded({extended: true, limit: '50mb'}));
@@ -47,6 +48,8 @@ app.set('views', path.join(__dirname,'views'));
 
 
 //routes
+app.use('/api-doc', apiDocRouter);
+
 app.use('/', homeRouter);
 
 app.use('/auth', authRouter);
@@ -56,6 +59,7 @@ app.use('/posts', postRouter);
 app.use('/pages', pageRouter);
 
 app.use('/users', userRouter);
+
 //404 error handler
 
 app.use((req, res) => {
