@@ -5,6 +5,7 @@
         "description": "description for social media",
         "version": "1.0.0"
     },
+    "components": [],
     "tags": [
         {
             "name": "Auth",
@@ -27,7 +28,77 @@
             "description": "routes  about users"
         }
     ],
-    "paths": [
-        
-    ]
+    "paths": {
+        "/auth/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register user",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "example": {
+                                    "email": "exampleemail@gmail.com",
+                                    "username": "exampleusername",
+                                    "password": "examplepass",
+                                    "name": "examplename"
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "user registed successfully"
+                    },
+                    "400": {
+                        "description": "req body is not valid"
+                    }
+                }
+            }
+        },
+        "/pages/{pageID}": {
+            "get": {
+                "tags": ["Page"],
+                "summary": "get page",
+                "parameters": [
+                    {
+                        "name": "pageID",
+                        "in": "path",
+                        "required": true,
+                        "type": "string",
+                        "example": "exampleid"
+                    }
+                ],
+                "reponses": {
+                    "200": {
+                        "description": "get page successfull"
+                    }
+                }
+            }
+        },
+        "/pages/{pageID}/follow": {
+            "post": {
+                "tags": ["Page"],
+                "summary": "folowing users",
+                "parameters":[
+                    {
+                        "name": "pageID",
+                        "in": "path",
+                        "required": true,
+                        "type": "string"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "folowed successfully"
+                    }
+                }
+            }
+        }
+
+    }
 }
