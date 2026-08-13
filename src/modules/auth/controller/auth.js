@@ -65,7 +65,7 @@ exports.register = async (req, res, next) => {
         return res.redirect('/auth/register')
         // return responseHandler.successResponse(res, 201, { message: 'User created successfully', user: { ...newUser.toObject() , password: undefined } })
     } catch (error) {
-        
+
         next(error)
         // responseHandler.errorResponse(res, 400, error, { error })
     }
@@ -118,6 +118,55 @@ exports.login = async (req, res, next) => {
         return res.redirect('/auth/login')
     } catch (error) {
         next(error)
-        
+
     }
 };
+
+
+exports.refreshToken = async (req, res, next) => {
+    try {
+        const refreshToken = req.cookies['refresh-token'];
+
+        if (!refreshToken) {
+            req.flash('error', 'refresh token not found.login again')
+
+            return res.redirect('/auth/login')
+        }
+        const userID = await refreshTokenModel.verifyToken(refreshToken);
+
+        if (!userID) {
+            req.flash('error', 'user id not found.login again')
+
+            return res.redirect('/auth/login')
+        };
+
+        await refreshTokenModel.findOneAndDelete({ token: refreshToken });
+
+        const user = await userModel.findOne({ _id: userID });
+
+        if (!user) {
+            req.flash('error', 'user not found.login again')
+
+            return res.redirect('/auth/login')
+        };
+
+        const accessToken = jwt.sign({ userID: user._id }, process.env.JWT_SECRET, {
+            expiresIn: '30day'
+        });
+
+        const newRefreshToken = await refreshTokenModel.createToken(user);
+
+        res.cookie('access-token', accessToken, {
+            maxAge: 900_000_000,
+            httpOnly: true
+        });
+
+        res.cookie('refresh-token', newRefreshToken, {
+            maxAge: 900_000_000,
+            httpOnly: true
+        });
+
+    } catch (error) {
+        next(error)
+    }
+}

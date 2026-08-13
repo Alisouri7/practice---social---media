@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const { v4: uuidv4 } = require('uuid');
-const { ref } = require('yup');
 
 
 const schema = mongoose.Schema({

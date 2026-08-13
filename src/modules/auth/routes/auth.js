@@ -10,5 +10,7 @@ router.route('/login')
     .get(authController.showLoginView)
     .post(authController.login);
 
+router.route('/refresh').get(authController.refreshToken);
+
 
 module.exports = router;
