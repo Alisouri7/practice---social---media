@@ -169,4 +169,36 @@ exports.refreshToken = async (req, res, next) => {
     } catch (error) {
         next(error)
     }
-}
+};
+
+exports.showForgetPasswordView = async (req, res, next) => {
+    try {
+        return res.render('./Pages/Auth/Recovery/forgetPassword')
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.forgetPassword = async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.showResetPasswordView = async (req, res, next) => {
+    try {
+        return res.render('./Pages/Auth/Recovery/resetPassword')
+    } catch (error) {
+        next(error)
+    }
+};
+
+exports.resetPassword = async (req, res, next) => {
+    try {
+        
+    } catch (error) {
+        next(error)
+    }
+};
