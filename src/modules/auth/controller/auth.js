@@ -3,7 +3,8 @@ const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
 const refreshTokenModel = require('./../../token/refresh_token/model/refreshToken');
 const userRegisterValidationSchema = require('./../../../utils/validators/registerUserValidator');
-const userLoginValidationSchema = require('./../../../utils/validators/loginUserValidator')
+const userLoginValidationSchema = require('./../../../utils/validators/loginUserValidator');
+const forgetPasswordValidationSchema = require('./../../../utils/validators/forgetPasswordValidator');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
@@ -181,7 +182,18 @@ exports.showForgetPasswordView = async (req, res, next) => {
 
 exports.forgetPassword = async (req, res, next) => {
     try {
-        
+        const { email } = req.body;
+
+        await forgetPasswordValidationSchema.validate({ email });
+
+        const user = await userModel.findOne({email});
+        if (!user) {
+            req.flash('error', 'User Not Found')
+
+            return res.redirect('/auth/forget-password')
+        };
+
+
     } catch (error) {
         next(error)
     }
@@ -197,7 +209,7 @@ exports.showResetPasswordView = async (req, res, next) => {
 
 exports.resetPassword = async (req, res, next) => {
     try {
-        
+
     } catch (error) {
         next(error)
     }
