@@ -2,13 +2,16 @@ const { errorHandler } = require('./../../../utils/middlewares/errorHandler');
 const responseHandler = require('./../../../utils/responses');
 const userModel = require('./../../users/model/User');
 const refreshTokenModel = require('./../../token/refresh_token/model/refreshToken');
+const resetPasswordModel = require('./../../resetPassword/model/resetPassword');
 const userRegisterValidationSchema = require('./../../../utils/validators/registerUserValidator');
 const userLoginValidationSchema = require('./../../../utils/validators/loginUserValidator');
 const forgetPasswordValidationSchema = require('./../../../utils/validators/forgetPasswordValidator');
+const resetPasswordValidationSchema = require('./../../../utils/validators/resetPasswordValidator');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
-
+const crypto = require('crypto');          //reset pass token
+const nodeMailer = require('nodemailer');
 
 exports.showRegisterView = async (req, res) => {
     return res.render('./Pages/Auth/Register/index')
@@ -186,13 +189,47 @@ exports.forgetPassword = async (req, res, next) => {
 
         await forgetPasswordValidationSchema.validate({ email });
 
-        const user = await userModel.findOne({email});
+        const user = await userModel.findOne({ email });
         if (!user) {
             req.flash('error', 'User Not Found')
 
             return res.redirect('/auth/forget-password')
         };
 
+        const resetToken = crypto.randomBytes(32).toString('hex');
+
+        const resetTokenExpireTime = Date.now() + (1000 * 60 * 3);
+
+        const resetPassword = new resetPasswordModel({
+            user: user._id,
+            token: resetToken,
+            tokenExpireTime: resetTokenExpireTime
+        });
+
+        await resetPassword.save();
+
+        const transporter = nodeMailer.createTransport({
+            service: 'gmail',
+            auth: {
+                user: 'souri7205@gmail.com',
+                pass: 'woqf xyqt cyba lumm'
+            }
+        });
+
+        const mailOptions = {
+            from: 'souri7205@gmail.com',
+            to: email,
+            subject: 'Reset Password Link (social project)',
+            html: `   
+            <h2>Hi ${user.name}, link has 3 minutes expire time</h2>
+            <a href=http://localhost:${process.env.PORT}/auth/reset-password/${resetToken}> >Reset Password</a>`   //use html prop instead text to render html tags
+        };
+
+        transporter.sendMail(mailOptions);
+
+        req.flash('success', 'reset password link sent to your email! ')
+
+        return res.redirect(req.headers.referer)
 
     } catch (error) {
         next(error)
@@ -209,7 +246,43 @@ exports.showResetPasswordView = async (req, res, next) => {
 
 exports.resetPassword = async (req, res, next) => {
     try {
+        const { password, token } = req.body;
 
+        await resetPasswordValidationSchema.validate({ token, password }, { abortEarly: false });
+
+
+        const resetPassword = await resetPasswordModel.findOne({
+            token,
+            tokenExpireTime: { $gt: Date.now() }
+        });
+
+        if (!resetPassword) {
+            req.flash('error', 'Invalid or Expired Token')
+
+            return res.redirect(req.headers.referer)
+        };
+
+        const user = await userModel.findOne({ _id: resetPassword.user });
+
+        if (!user) {
+            req.flash('error', 'can not find user from resetpassword')
+
+            return res.redirect(req.headers.referer)
+        };
+
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        await userModel.findOneAndUpdate({_id: user._id}, {
+            password: hashedPassword
+        });
+
+        await resetPasswordModel.findOneAndDelete({_id: resetPassword._id});
+
+            
+        req.flash('success', 'Password reset successfully')
+
+        return res.redirect(req.headers.referer)
+        
     } catch (error) {
         next(error)
     }
